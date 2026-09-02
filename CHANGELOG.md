@@ -2,6 +2,25 @@
 
 All notable changes to Crumb are recorded here. This project follows semantic versioning.
 
+## 0.1.2 - September 1, 2026
+
+### 🐛 Fixes
+
+- Clicking a bookmark now opens it in the default browser when Crumb runs as an AppImage. The popup used to close with no browser and no error message
+- Opening a link that fails now shows a message instead of passing silently
+
+### 🔗 Link opening
+
+- Links are opened by a new `open_link` command in Rust instead of the opener plugin's `open_url`
+- On Linux the launcher is started with the AppImage mount point stripped out of every inherited variable, so the browser loads system libraries rather than the ones bundled with Crumb
+- The launcher's exit status is checked for a short grace period, long enough to catch an immediate failure without waiting for the browser to close
+- Only `http` and `https` links are passed to a launcher, checked again in Rust rather than trusting the caller
+- macOS and Windows still go through the opener plugin, which has neither problem
+
+### 🏷️ Versioning
+
+- Updated application and package metadata to 0.1.2
+
 ## 0.1.1 - September 1, 2026
 
 ### 🐧 Linux packaging

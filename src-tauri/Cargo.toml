@@ -1,6 +1,6 @@
 [package]
 name = "crumb"
-version = "0.1.1"
+version = "0.1.2"
 description = "A tiny bookmark launcher that lives in your system tray"
 authors = ["Pink Pixel <admin@pinkpixel.dev>"]
 license = "Apache-2.0"

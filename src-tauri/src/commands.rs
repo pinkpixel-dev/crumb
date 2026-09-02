@@ -8,6 +8,7 @@ use tauri::AppHandle;
 use tauri_plugin_autostart::ManagerExt;
 use tauri_plugin_clipboard_manager::ClipboardExt;
 
+use crate::opener;
 use crate::shortcuts;
 use crate::storage::{self, Bookmark, Settings};
 use crate::window;
@@ -67,4 +68,15 @@ pub fn set_launch_at_startup(app: AppHandle, enabled: bool) -> Result<(), String
     } else {
         manager.disable().map_err(|e| e.to_string())
     }
+}
+
+/// Open a bookmark in the user's default browser.
+///
+/// The work happens on a blocking thread because it waits briefly on the
+/// launcher it starts, and the popup must stay responsive while it does.
+#[tauri::command]
+pub async fn open_link(url: String) -> Result<(), String> {
+    tauri::async_runtime::spawn_blocking(move || opener::open_url(&url))
+        .await
+        .map_err(|err| format!("Opening the link was interrupted: {err}"))?
 }

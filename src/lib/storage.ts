@@ -38,6 +38,16 @@ export async function clipboardText(): Promise<string> {
   return invoke<string>("clipboard_text");
 }
 
+/**
+ * Open a bookmark in the default browser.
+ *
+ * Rust handles this rather than the opener plugin so that a browser which
+ * fails to start is reported back here instead of passing as a success.
+ */
+export async function openLink(url: string): Promise<void> {
+  await invoke("open_link", { url });
+}
+
 export async function hidePopup(): Promise<void> {
   await invoke("hide_popup");
 }

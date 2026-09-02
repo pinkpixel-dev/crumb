@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { openUrl } from "@tauri-apps/plugin-opener";
 import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 
 import { ActionBar } from "./components/ActionBar";
@@ -20,7 +19,7 @@ import { useSettings } from "./hooks/useSettings";
 import { useTrayEvents } from "./hooks/useTrayEvents";
 import { favorites as pickFavorites, findDuplicate, others } from "./lib/bookmarks";
 import { searchBookmarks } from "./lib/search";
-import { clipboardText, hidePopup } from "./lib/storage";
+import { clipboardText, hidePopup, openLink } from "./lib/storage";
 import { isValidUrl } from "./lib/urls";
 import type { Bookmark, BookmarkDraft } from "./types/bookmark";
 
@@ -68,7 +67,7 @@ export default function App() {
 
   const open = useCallback(async (bookmark: Bookmark) => {
     try {
-      await openUrl(bookmark.url);
+      await openLink(bookmark.url);
       await hidePopup();
     } catch (err) {
       setNotice(`Could not open that link: ${err}`);

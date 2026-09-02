@@ -1,6 +1,7 @@
 //! Crumb — a tiny bookmark launcher that lives in the system tray.
 
 mod commands;
+mod opener;
 mod shortcuts;
 mod storage;
 mod tray;
@@ -65,6 +66,7 @@ pub fn run() {
             commands::save_settings,
             commands::bookmarks_path,
             commands::clipboard_text,
+            commands::open_link,
             commands::hide_popup,
             commands::resize_popup,
             commands::set_global_shortcut,
