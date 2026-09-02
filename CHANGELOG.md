@@ -2,6 +2,21 @@
 
 All notable changes to Crumb are recorded here. This project follows semantic versioning.
 
+## 1.0.0 - September 2, 2026
+
+### 🎉 Release
+
+- Marked the current Crumb feature set as the first stable release
+- Existing bookmark and settings files continue to work without a migration
+
+### 🏷️ Versioning
+
+- Updated the application, JavaScript package, Rust package, lockfile, and Tauri metadata to 1.0.0
+
+### 📚 Documentation
+
+- Updated the release notes, technical overview, roadmap, and repository metadata for 1.0.0
+
 ## 0.1.2 - September 1, 2026
 
 ### 🐛 Fixes
