@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { writeText } from "@tauri-apps/plugin-clipboard-manager";
-import { ClipboardPlus, Plus, Settings as SettingsIcon } from "lucide-react";
 
+import { ActionBar } from "./components/ActionBar";
 import { AddBookmark } from "./components/AddBookmark";
-import { BrowseView } from "./components/BrowseView";
 import { CARD_COLUMNS } from "./components/BookmarkList";
+import { FavoritesSection } from "./components/FavoritesSection";
+import { LinksSection } from "./components/LinksSection";
 import { ContextMenu, type MenuTarget } from "./components/ContextMenu";
 import { Dialog, type DialogAction } from "./components/Dialog";
 import { FAVORITE_COLUMNS } from "./components/FavoriteGrid";
@@ -209,6 +210,10 @@ export default function App() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [backToBrowse, flat, menu, modalOpen, nav, open, query, startAdd, view]);
 
+  // The shell is sized by its content, capped at the window maximum. Nothing
+  // inside it may stretch: a flex-1 child would fill the window, so
+  // useAutoResize would measure the window height straight back to itself and
+  // the popup could grow but never shrink.
   return (
     <div
       ref={shell}
@@ -217,7 +222,7 @@ export default function App() {
     >
       {view === "browse" && (
         <>
-          <header className="flex items-center gap-1.5 border-b border-line px-2 py-2">
+          <header className="flex shrink-0 items-center gap-1.5 border-b border-line px-2 py-2">
             <SearchBar ref={searchInput} value={query} onChange={setQuery} />
             <ViewToggle
               value={settings.viewMode}
@@ -225,56 +230,36 @@ export default function App() {
             />
           </header>
 
-          <div className="scroll-thin min-h-0 flex-1 overflow-y-auto">
-            <BrowseView
-              favorites={favorites}
-              rest={rest}
+          <FavoritesSection
+            items={favorites}
+            selected={nav.index < favorites.length ? nav.index : -1}
+            onOpen={open}
+            onContextMenu={(bookmark, x, y) => setMenu({ bookmark, x, y })}
+            onReorder={store.reorderFavorite}
+            onHover={nav.setIndex}
+          />
+
+          <ActionBar
+            onAdd={() => startAdd()}
+            onAddClipboard={() => void addFromClipboard()}
+            onOpenSettings={() => setView("settings")}
+          />
+
+          <div className="scroll-thin min-h-0 overflow-y-auto">
+            <LinksSection
+              items={rest}
               total={store.bookmarks.length}
               searching={searching}
               viewMode={settings.viewMode}
+              offset={favorites.length}
               selected={nav.index}
               onOpen={open}
               onToggleFavorite={store.toggleFavorite}
               onContextMenu={(bookmark, x, y) => setMenu({ bookmark, x, y })}
-              onReorderFavorite={store.reorderFavorite}
               onHover={nav.setIndex}
             />
           </div>
 
-          <footer className="flex items-center gap-1 border-t border-line px-2 py-1.5">
-            <button
-              type="button"
-              onClick={() => startAdd()}
-              className="flex h-7 items-center gap-1.5 rounded-md px-2 text-ink
-                         transition-colors hover:bg-hover"
-            >
-              <Plus size={13} aria-hidden="true" />
-              Add link
-            </button>
-            <button
-              type="button"
-              onClick={() => void addFromClipboard()}
-              aria-label="Add the URL on the clipboard"
-              title="Add the URL on the clipboard"
-              className="grid size-7 place-items-center rounded-md text-faint
-                         transition-colors hover:bg-hover hover:text-ink"
-            >
-              <ClipboardPlus size={13} aria-hidden="true" />
-            </button>
-
-            <span className="ml-auto font-mono text-[10px] text-faint">↑↓ · ⏎ · esc</span>
-
-            <button
-              type="button"
-              onClick={() => setView("settings")}
-              aria-label="Settings"
-              title="Settings"
-              className="grid size-7 place-items-center rounded-md text-faint
-                         transition-colors hover:bg-hover hover:text-ink"
-            >
-              <SettingsIcon size={13} aria-hidden="true" />
-            </button>
-          </footer>
         </>
       )}
 

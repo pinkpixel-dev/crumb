@@ -27,8 +27,9 @@ First release. Phases 1 through 3 of the project plan.
 
 ### 🎨 Views
 
-- Favorites shown as a compact icon grid
-- Two layouts for the main list: rows, or small cards
+- Favorites shown as a compact icon grid, pinned above the scrolling list
+- Add link, clipboard, and settings sit in a bar between favorites and the list, so the bar does not drift to the bottom of a long collection
+- Two layouts for the main list: rows with the URL underneath, or a four-column grid of small icon tiles
 - The layout choice is saved
 - Light, dark, and follow-the-system themes
 

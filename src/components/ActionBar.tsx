@@ -13,7 +13,7 @@ type Props = {
  */
 export function ActionBar({ onAdd, onAddClipboard, onOpenSettings }: Props) {
   return (
-    <div className="flex shrink-0 items-center gap-1 border-y border-line px-2 py-1.5">
+    <div className="flex shrink-0 items-center gap-1 border-b border-line px-2 py-1.5">
       <button
         type="button"
         onClick={onAdd}

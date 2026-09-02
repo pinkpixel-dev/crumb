@@ -53,6 +53,12 @@ export function SiteIcon({ url, size = 18, className = "" }: Props) {
         className={`shrink-0 rounded-[3px] object-contain ${className}`}
         style={{ width: size, height: size }}
         onError={() => setStage("monogram")}
+        // Some sites answer /favicon.ico with an HTML error page and a 200,
+        // which decodes to nothing and never fires onError. A zero-width image
+        // is the only signal that happened.
+        onLoad={(event) => {
+          if (event.currentTarget.naturalWidth === 0) setStage("monogram");
+        }}
       />
     );
   }

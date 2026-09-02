@@ -27,7 +27,7 @@ export function FavoritesSection({
   if (items.length === 0) return null;
 
   return (
-    <section aria-label="Favorites" className="shrink-0 pt-2">
+    <section aria-label="Favorites" className="shrink-0 border-b border-line pt-2">
       <SectionLabel>Favorites</SectionLabel>
       <div className="scroll-thin max-h-[190px] overflow-y-auto pb-2">
         <FavoriteGrid

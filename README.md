@@ -11,7 +11,7 @@ Everything is stored locally as a plain JSON file. No account, no sync, no telem
 ## What it does
 
 - Lives in the system tray and opens a popup near the tray icon
-- Shows favorites as a compact icon grid at the top
+- Shows favorites as a compact icon grid at the top, above a fixed action bar
 - Filters bookmarks as you type, matching title, URL, and domain
 - Recognizes 92 popular sites and draws their real brand icon
 - Falls back to the site's own favicon, then to a colored monogram
@@ -77,7 +77,7 @@ On most Linux desktops the tray does not pass left clicks to the application, so
 
 ### Adding a link
 
-Click **Add link** in the footer, or press `Ctrl+N`.
+Click **Add link** in the bar under your favorites, or press `Ctrl+N`.
 
 Paste or type the URL. Crumb fills in the title for you. For a site it recognizes you get the proper name, so `https://github.com/anything` becomes "GitHub". For anything else it guesses from the path and falls back to the hostname. Type your own title any time and Crumb stops guessing.
 
@@ -87,7 +87,7 @@ If you save a link you already have, Crumb tells you and offers to open the exis
 
 ### The clipboard shortcut
 
-Copy a URL anywhere, then click the clipboard button in the footer or pick **Add Clipboard URL** from the tray menu. The add form opens with the URL already filled in. If the clipboard holds something that is not a web address, Crumb says so and does nothing.
+Copy a URL anywhere, then click the clipboard button next to Add link, or pick **Add Clipboard URL** from the tray menu. The add form opens with the URL already filled in. If the clipboard holds something that is not a web address, Crumb says so and does nothing.
 
 ### Favorites
 
@@ -99,7 +99,9 @@ Drag a tile to reorder the grid. If you would rather not use the mouse, focus a 
 
 The toggle in the top right switches the main list between rows and cards.
 
-Rows are denser and show more of the URL, so they suit a long list you scan by name. Cards are a tighter grid of icon tiles, which works better when you recognize links by their logo. Favorites stay a grid in both layouts, because that is already the right shape for them.
+Rows are denser and show the URL under each title, so they suit a long list you scan by name. Cards are a tight four-column grid of icon tiles with the title underneath, which works better when you recognize links by their logo. Favorites stay a grid in both layouts, because that is already the right shape for them.
+
+The Add link bar sits between your favorites and the list, not at the bottom of the popup, so it stays in the same place however many links you have.
 
 Your choice is saved.
 
