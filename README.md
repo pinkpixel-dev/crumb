@@ -1,12 +1,18 @@
 # Crumb
 
+<p align="center">
+  <img src="icon.png" width="250" alt="Navi chat interface">
+</p>
+
 Crumb is a small bookmark launcher that lives in your system tray. Click the tray icon, a compact popup appears, you click a link, and it opens in your default browser. That is the whole idea.
 
 It exists because browser bookmarks are a filing cabinet and most of us only really need a shortcut drawer. Crumb holds the twenty or thirty links you actually reopen, recognizes the popular ones by their brand icon, and gets out of the way.
 
 Everything is stored locally as a plain JSON file. No account, no sync, no telemetry.
 
-![Crumb in list view](DOCS/images/list-dark.png)
+<p align="center">
+  <img src="screenshot.png" alt="Crumb in list view">
+</p>
 
 ## What it does
 
