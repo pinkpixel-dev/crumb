@@ -2,6 +2,18 @@
 
 All notable changes to Crumb are recorded here. This project follows semantic versioning.
 
+## 1.0.1 - September 2, 2026
+
+### 🪟 Windows release workflow
+
+- Added a manual GitHub Actions workflow that builds an unsigned 64-bit NSIS installer
+- The workflow uploads the installer to an existing GitHub Release and replaces the asset when the workflow runs again
+- The workflow checks the release tag against the package version before it starts the build
+
+### 🏷️ Versioning
+
+- Updated the application, JavaScript package, Rust package, lockfile, and Tauri metadata to 1.0.1
+
 ## 1.0.0 - September 2, 2026
 
 ### 🎉 Release

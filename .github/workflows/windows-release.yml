@@ -1,0 +1,89 @@
+name: Windows release installer
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Existing GitHub release tag, such as v1.0.1
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: windows-release-${{ inputs.release_tag }}
+  cancel-in-progress: false
+
+jobs:
+  build-and-upload:
+    name: Build and upload unsigned NSIS installer
+    runs-on: windows-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Check out the release tag
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.release_tag }}
+          persist-credentials: false
+
+      - name: Validate the release and version
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+        run: |
+          $package = Get-Content package.json -Raw | ConvertFrom-Json
+          $tagVersion = $env:RELEASE_TAG -replace '^v', ''
+
+          if ($tagVersion -ne $package.version) {
+            throw "Release tag '$env:RELEASE_TAG' does not match package version '$($package.version)'."
+          }
+
+          gh release view "$env:RELEASE_TAG" `
+            --repo "$env:GITHUB_REPOSITORY" `
+            --json tagName `
+            --jq '.tagName'
+
+          if ($LASTEXITCODE -ne 0) {
+            throw "GitHub release '$env:RELEASE_TAG' does not exist."
+          }
+
+      - name: Install Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Build the NSIS installer
+        run: npm run tauri:build -- --bundles nsis --target x86_64-pc-windows-msvc
+
+      - name: Upload the installer to the release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+        run: |
+          $bundlePath = "src-tauri/target/x86_64-pc-windows-msvc/release/bundle/nsis"
+          $installers = @(Get-ChildItem -Path $bundlePath -Filter "*-setup.exe" -File)
+
+          if ($installers.Count -ne 1) {
+            throw "Expected one NSIS installer in '$bundlePath', found $($installers.Count)."
+          }
+
+          gh release upload "$env:RELEASE_TAG" "$($installers[0].FullName)" `
+            --repo "$env:GITHUB_REPOSITORY" `
+            --clobber
+
+          if ($LASTEXITCODE -ne 0) {
+            throw "Failed to upload '$($installers[0].Name)' to release '$env:RELEASE_TAG'."
+          }
