@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <rect width="1024" height="1024" rx="228" fill="#2E2A26"/>
+  <!-- bookmark ribbon, with a bite taken out of the lower right -->
+  <path d="M336 208h352a40 40 0 0 1 40 40v452a20 20 0 0 1-31 17L512 596 327 717a20 20 0 0 1-31-17V248a40 40 0 0 1 40-40z"
+        fill="#E8A94B"/>
+  <!-- the crumbs that fell off -->
+  <circle cx="760" cy="756" r="42" fill="#E8A94B"/>
+  <circle cx="838" cy="846" r="26" fill="#E8A94B" opacity="0.75"/>
+  <circle cx="722" cy="872" r="17" fill="#E8A94B" opacity="0.55"/>
+</svg>
