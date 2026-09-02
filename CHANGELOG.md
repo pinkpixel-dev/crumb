@@ -2,6 +2,19 @@
 
 All notable changes to Crumb are recorded here. This project follows semantic versioning.
 
+## 0.1.1 - September 1, 2026
+
+### 🐧 Linux packaging
+
+- Added `npm run tauri:build` for production packages on every supported platform
+- Added `npm run tauri:build:linux` for DEB, AppImage, and RPM packages
+- Linux builds now set `NO_STRIP=YES` to prevent linuxdeploy failures on libraries with `.relr.dyn` sections
+- AppImage startup now ignores bundled GIO modules that can conflict with WebKitGTK and system crypto libraries
+
+### 🏷️ Versioning
+
+- Updated application and package metadata to 0.1.1
+
 ## 0.1.0 - September 1, 2026
 
 First release. Phases 1 through 3 of the project plan.

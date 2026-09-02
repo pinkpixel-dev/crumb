@@ -13,12 +13,32 @@ use tauri_plugin_autostart::MacosLauncher;
 /// it loses focus, which otherwise makes devtools impossible to use.
 const NO_AUTOHIDE_ENV: &str = "CRUMB_NO_AUTOHIDE";
 
+#[cfg(target_os = "linux")]
+const DISABLED_APPIMAGE_GIO_MODULES: &str = "/__crumb_appimage_disabled_gio_modules__";
+
+#[cfg(target_os = "linux")]
+fn disabled_appimage_gio_modules_path(appimage: Option<&std::ffi::OsStr>) -> Option<&'static str> {
+    appimage.map(|_| DISABLED_APPIMAGE_GIO_MODULES)
+}
+
+#[cfg(target_os = "linux")]
+fn configure_appimage_gio_modules() {
+    if let Some(path) = disabled_appimage_gio_modules_path(std::env::var_os("APPIMAGE").as_deref())
+    {
+        std::env::set_var("GIO_MODULE_DIR", path);
+        std::env::set_var("GIO_EXTRA_MODULES", path);
+    }
+}
+
 fn autohide_enabled() -> bool {
     std::env::var_os(NO_AUTOHIDE_ENV).is_none()
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    #[cfg(target_os = "linux")]
+    configure_appimage_gio_modules();
+
     tauri::Builder::default()
         // Must be registered first so a second launch reaches the running app.
         .plugin(tauri_plugin_single_instance::init(|app, _argv, _cwd| {
@@ -91,4 +111,23 @@ pub fn run() {
         })
         .run(tauri::generate_context!())
         .expect("error while running Crumb");
+}
+
+#[cfg(all(test, target_os = "linux"))]
+mod tests {
+    use super::{disabled_appimage_gio_modules_path, DISABLED_APPIMAGE_GIO_MODULES};
+    use std::ffi::OsStr;
+
+    #[test]
+    fn appimage_execution_disables_bundled_gio_modules() {
+        assert_eq!(
+            disabled_appimage_gio_modules_path(Some(OsStr::new("/tmp/Crumb.AppImage"))),
+            Some(DISABLED_APPIMAGE_GIO_MODULES)
+        );
+    }
+
+    #[test]
+    fn normal_linux_execution_keeps_system_gio_modules() {
+        assert_eq!(disabled_appimage_gio_modules_path(None), None);
+    }
 }

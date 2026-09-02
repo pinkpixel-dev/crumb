@@ -56,10 +56,12 @@ npm run tauri dev
 For a packaged build:
 
 ```bash
-npm run tauri build
+npm run tauri:build
 ```
 
 The installers land in `src-tauri/target/release/bundle/`.
+
+On Linux, this command disables stripping inside linuxdeploy. This avoids AppImage build failures on systems whose libraries contain `.relr.dyn` sections.
 
 ### A note on development
 
